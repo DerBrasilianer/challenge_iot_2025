@@ -1,0 +1,317 @@
+[
+    {
+        "id": "5ed5eea2bcf29d70",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bc8fafeada9f124c",
+        "type": "mqtt in",
+        "z": "5ed5eea2bcf29d70",
+        "name": "",
+        "topic": "LTAKN/publish",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "886bb99ebf96f626",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 220,
+        "wires": [
+            [
+                "f91d04b7d5ea067e",
+                "4ef2c4bdbd32dccb",
+                "36debf0498b941a6",
+                "54d4af28ad83f06a"
+            ]
+        ]
+    },
+    {
+        "id": "f91d04b7d5ea067e",
+        "type": "ui_text",
+        "z": "5ed5eea2bcf29d70",
+        "group": "91d993d5ccdcbf64",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "(Text) Status da Trava",
+        "label": "Status da Trava",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 520,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "0c12b92c3e89ae4e",
+        "type": "ui_switch",
+        "z": "5ed5eea2bcf29d70",
+        "name": "",
+        "label": "(Switch) Presença da Moto",
+        "tooltip": "",
+        "group": "91d993d5ccdcbf64",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "LTAKN/subscribe",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "chegou",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "saiu",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 220,
+        "y": 420,
+        "wires": [
+            [
+                "d7072a1258b9f558",
+                "4c9d3232a86d9075"
+            ]
+        ]
+    },
+    {
+        "id": "d7072a1258b9f558",
+        "type": "mqtt out",
+        "z": "5ed5eea2bcf29d70",
+        "name": "",
+        "topic": "LTAKN/subscribe",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "886bb99ebf96f626",
+        "x": 490,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "4ef2c4bdbd32dccb",
+        "type": "debug",
+        "z": "5ed5eea2bcf29d70",
+        "name": "(Debug) LTAKN/Publish",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4c9d3232a86d9075",
+        "type": "debug",
+        "z": "5ed5eea2bcf29d70",
+        "name": "(Debug) LTAKN/Subscribe",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "36debf0498b941a6",
+        "type": "function",
+        "z": "5ed5eea2bcf29d70",
+        "name": "(Function) Acumular Histórico do Pátio",
+        "func": "const agora = new Date().toLocaleString();\n\nlet textoOriginal = msg.payload;\n\nif (textoOriginal === \"Trava fechada\") {\n    textoOriginal = \"🚩 Moto chegou ao pátio\";\n} else if (textoOriginal === \"Trava aberta\") {\n    textoOriginal = \"🏁 Moto saiu do pátio\";\n}\n\nconst novaLinha = `[${agora}] ${textoOriginal}`;\n\nlet historico = flow.get(\"historico\") || \"\";\n\nhistorico += novaLinha + \"\\n\";\n\nlet linhas = historico.trim().split(\"\\n\");\nif (linhas.length > 10) {\n    linhas = linhas.slice(linhas.length - 10);\n    historico = linhas.join(\"\\n\") + \"\\n\";\n}\n\nflow.set(\"historico\", historico);\n\nmsg.payload = historico;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "flow.set(\"historico\", \"\");",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 160,
+        "wires": [
+            [
+                "3be64b816a684ae5"
+            ]
+        ]
+    },
+    {
+        "id": "3be64b816a684ae5",
+        "type": "ui_template",
+        "z": "5ed5eea2bcf29d70",
+        "group": "91d993d5ccdcbf64",
+        "name": "",
+        "order": 3,
+        "width": "6",
+        "height": "6",
+        "format": "<pre style=\"white-space: pre-wrap;\">{{msg.payload}}</pre>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 840,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e8fbbbf5b4838371",
+        "type": "ui_button",
+        "z": "5ed5eea2bcf29d70",
+        "name": "",
+        "group": "91d993d5ccdcbf64",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "(Button) Limpar Histórico",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "limpar",
+        "payloadType": "str",
+        "topic": "painel/historico/limpar",
+        "topicType": "str",
+        "x": 210,
+        "y": 40,
+        "wires": [
+            [
+                "98e96cb21923c3c8"
+            ]
+        ]
+    },
+    {
+        "id": "98e96cb21923c3c8",
+        "type": "function",
+        "z": "5ed5eea2bcf29d70",
+        "name": "(Function) Realizar Limpa de Histórico",
+        "func": "if (msg.payload === \"limpar\") {\n\n    flow.set(\"historico\", \"\");\n    msg.payload = \"📭 Histórico limpo.\";\n    return msg;\n    \n}\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 40,
+        "wires": [
+            [
+                "3be64b816a684ae5"
+            ]
+        ]
+    },
+    {
+        "id": "7f1c8e5e8cdd5da9",
+        "type": "ui_led",
+        "z": "5ed5eea2bcf29d70",
+        "order": 4,
+        "group": "91d993d5ccdcbf64",
+        "width": 0,
+        "height": 0,
+        "label": "Indicador Visual da Trava",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "true",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "false",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "(Led) Indicador Visual da Trava",
+        "x": 910,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "54d4af28ad83f06a",
+        "type": "function",
+        "z": "5ed5eea2bcf29d70",
+        "name": "(Function) Atualizar LED",
+        "func": "if (msg.payload === \"Trava fechada\") {\n\n    msg.payload = true; \n\n} else if (msg.payload === \"Trava aberta\") {\n\n    msg.payload = false; \n\n} else {\n\n    return null; \n\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 200,
+        "wires": [
+            [
+                "7f1c8e5e8cdd5da9"
+            ]
+        ]
+    },
+    {
+        "id": "886bb99ebf96f626",
+        "type": "mqtt-broker",
+        "name": "HIVEMQ",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthQos": "0",
+        "willQos": "0"
+    },
+    {
+        "id": "91d993d5ccdcbf64",
+        "type": "ui_group",
+        "name": "Entradas Digitais",
+        "tab": "efe84172fd98fe6d",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "efe84172fd98fe6d",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
