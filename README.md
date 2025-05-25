@@ -47,7 +47,7 @@ Este protótipo foi desenvolvido para o **Challenge da Mottu**, na disciplina *D
 - `ESP32/`: Código da simulação da ESP32 (Arduino/C++)
 - `Node-Red/`: Fluxo JSON do Node-RED com o painel
 - `Prints do Projeto/`: Prints do circuito e do painel do dashboard
-- `Link_do_Video.txt`: Roteiro do pitch e anotações
+- `Link_do_Video.txt`: Vídeo Pitch do projeto
 - `README.md`: Documentação do projeto
 
 ---
