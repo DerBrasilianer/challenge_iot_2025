@@ -73,4 +73,4 @@ Este protótipo foi desenvolvido para o **Challenge da Mottu**, na disciplina *D
 
 Assista ao vídeo demonstrando o funcionamento completo do protótipo:
 
-📽️ [Link para o vídeo no YouTube (Não listado)](https://youtube.com/SEU_LINK_AQUI)
+📽️ [Link para o vídeo no YouTube (Não listado)](https://www.youtube.com/watch?v=2VftA_y3M6w)
