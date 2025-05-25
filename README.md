@@ -4,7 +4,7 @@ Protótipo funcional desenvolvido com **ESP32 (via Wokwi)**, **MQTT** e **Node-R
 
 ---
 
-## 👨‍💻 Integrantes
+## 👨‍💻 Integrantes - Grupo LTAKN
 
 - **Enzo Prado Soddano** – RM: 557937  
   [GitHub](https://github.com/DerBrasilianer)
